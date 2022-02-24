@@ -30,6 +30,7 @@ subprojects { //공통 적용
         testImplementation('org.springframework.boot:spring-boot-starter-test') {
             exclude group: 'junit', module: 'junit'
         }
+        developmentOnly 'org.springframework.boot:spring-boot-devtools'
     }
 
     test {

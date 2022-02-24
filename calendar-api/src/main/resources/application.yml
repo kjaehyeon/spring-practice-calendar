@@ -1,9 +1,19 @@
+
 spring:
+  profiles:
+    default: dev
+  thymeleaf:
+    cache: false
+    prefix: file:calendar-api/src/main/resources/templates/ #for update static file without rebuilding whole project
+  web:
+    resources:
+      cache:
+        period: 0
   datasource:
     url: jdbc:mysql://localhost:3306/calendar_db?useSSL=false&serverTimezone=Asia/Seoul
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: ''
+    password: 9404JHKim@
   jpa:
     open-in-view: false
     show-sql: true
@@ -12,3 +22,5 @@ spring:
         format_sql: true
     hibernate:
       ddl-auto: update
+    database: mysql
+

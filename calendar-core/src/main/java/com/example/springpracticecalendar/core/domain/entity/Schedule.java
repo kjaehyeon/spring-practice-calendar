@@ -36,7 +36,8 @@ public class Schedule extends BaseEntity{
             String description,
             LocalDateTime startAt,
             LocalDateTime endAt,
-            User writer){
+            User writer
+    ){
         return Schedule.builder()
                 .title(title)
                 .description(description)
