@@ -17,7 +17,7 @@ public abstract class BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     @CreatedDate
     private LocalDateTime createdAt;
@@ -25,7 +25,7 @@ public abstract class BaseEntity {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public BaseEntity(Long Id){
-        this.Id = Id;
+    public BaseEntity(Long id){
+        this.id = id;
     }
 }

@@ -4,10 +4,13 @@ import com.example.springpracticecalendar.core.constant.ScheduleType;
 import com.example.springpracticecalendar.core.domain.Event;
 import com.example.springpracticecalendar.core.domain.Notification;
 import com.example.springpracticecalendar.core.domain.Task;
+import com.example.springpracticecalendar.core.util.Period;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "schedules")
@@ -84,4 +87,11 @@ public class Schedule extends BaseEntity{
         return new Notification(this);
     }
 
+    public boolean isOverlapped(LocalDateTime startAt, LocalDateTime endAt) {
+        return Period.of(getStartAt(), getEndAt()).isOverlapped(startAt, endAt);
+    }
+
+    public boolean isOverlapped(Period period) {
+        return Period.of(getStartAt(), getEndAt()).isOverlapped(period);
+    }
 }

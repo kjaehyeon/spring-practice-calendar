@@ -1,15 +1,15 @@
 package com.example.springpracticecalendar.core.domain.entity;
 
 import com.example.springpracticecalendar.core.constant.RequestStatus;
+import com.example.springpracticecalendar.core.domain.Event;
+import com.example.springpracticecalendar.core.util.Period;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.time.LocalDate;
 
 @Getter
 @AllArgsConstructor
@@ -26,6 +26,15 @@ public class Engagement extends BaseEntity{
     @JoinColumn(name = "attendee_id")
     @ManyToOne
     private User attendee;
+
+    @Enumerated(value = EnumType.STRING)
     private RequestStatus requestStatus;
 
+    public Event getEvent(){
+        return schedule.toEvent();
+    }
+
+    public boolean isOverlapped(Period period){
+        return this.schedule.isOverlapped(period);
+    }
 }

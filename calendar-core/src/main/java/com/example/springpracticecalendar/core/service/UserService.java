@@ -3,6 +3,8 @@ package com.example.springpracticecalendar.core.service;
 import com.example.springpracticecalendar.core.domain.entity.User;
 import com.example.springpracticecalendar.core.domain.entity.repository.UserRepository;
 import com.example.springpracticecalendar.core.dto.UserCreateReq;
+import com.example.springpracticecalendar.core.exception.CalendarException;
+import com.example.springpracticecalendar.core.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,7 +22,7 @@ public class UserService {
     public User create(UserCreateReq userCreateReq){
         userRepository.findByEmail(userCreateReq.getEmail())
                 .ifPresent((user) ->{
-                    throw new RuntimeException("user already exists!");
+                    throw new CalendarException(ErrorCode.ALREADY_EXISTS_USER);
                 });
         return userRepository.save(
                 User.fromUserCreateReq(userCreateReq, passwordEncoder)
@@ -36,6 +38,6 @@ public class UserService {
     @Transactional
     public User findById(Long userId){
         return userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("There is no user with this Id"));
+                .orElseThrow(() -> new CalendarException(ErrorCode.USER_NOT_FOUND));
     }
 }
