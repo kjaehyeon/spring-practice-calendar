@@ -4,7 +4,6 @@ import com.example.springpracticecalendar.core.exception.CalendarException;
 import com.example.springpracticecalendar.core.exception.ErrorCode;
 import lombok.Data;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,10 +14,10 @@ import java.util.Optional;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(value ={
+    @ExceptionHandler(value = {
             CalendarException.class
     })
-    public ResponseEntity<ErrorResponse> handle(CalendarException ex){
+    public ResponseEntity<ErrorResponse> handle(CalendarException ex) {
         final ErrorCode errorCode = ex.getErrorCode();
         return new ResponseEntity<>(
                 new ErrorResponse(errorCode, errorCode.getMessage()),
@@ -28,7 +27,7 @@ public class GlobalExceptionHandler {
 
     //Validation이 실패했을 때 발생하는 예외처리
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handle(MethodArgumentNotValidException ex){
+    public ResponseEntity<ErrorResponse> handle(MethodArgumentNotValidException ex) {
         final ErrorCode errorCode = ErrorCode.VALIDATION_FAIL;
         return new ResponseEntity<>(
                 new ErrorResponse(
@@ -36,13 +35,13 @@ public class GlobalExceptionHandler {
                         Optional.ofNullable(ex.getBindingResult().getFieldError())
                                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                                 .orElse(errorCode.getMessage())
-                        ),
+                ),
                 ErrorHttpStatusMapper.mapToStatus(errorCode)
         );
     }
 
     @Data
-    public static class ErrorResponse{
+    public static class ErrorResponse {
         private final ErrorCode errorCode;
         private final String errorMessage;
     }

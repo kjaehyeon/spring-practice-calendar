@@ -8,6 +8,7 @@ import com.example.springpracticecalendar.core.exception.CalendarException;
 import com.example.springpracticecalendar.core.exception.ErrorCode;
 import com.example.springpracticecalendar.core.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class LoginService {
     public final static String LOGIN_SESSION_KEY = "USER_ID";
     private final UserService userService;
@@ -30,6 +32,7 @@ public class LoginService {
                 signUpReq.getPassword(),
                 signUpReq.getBirthday()
         ));
+        log.info("msg");
         session.setAttribute(LOGIN_SESSION_KEY, user.getId());
     }
 
