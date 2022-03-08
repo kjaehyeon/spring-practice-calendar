@@ -1,10 +1,8 @@
 package com.example.springpracticecalendar.api.controller;
 
 import com.example.springpracticecalendar.api.dto.*;
-import com.example.springpracticecalendar.api.service.EventService;
-import com.example.springpracticecalendar.api.service.NotificationService;
-import com.example.springpracticecalendar.api.service.ScheduleQueryService;
-import com.example.springpracticecalendar.api.service.TaskService;
+import com.example.springpracticecalendar.api.service.*;
+import com.example.springpracticecalendar.core.constant.RequestStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
 
@@ -25,6 +22,7 @@ public class ScheduleController {
     private final TaskService taskService;
     private final EventService eventService;
     private final NotificationService notificationService;
+    private final EngagementService engagementService;
 
     @PostMapping("/tasks")
     public ResponseEntity<Void> createTask(
@@ -81,5 +79,14 @@ public class ScheduleController {
                     String yearMonth
     ){
         return scheduleQueryService.getScheduleByMonth(authUser, yearMonth == null ? YearMonth.now() : YearMonth.parse(yearMonth));
+    }
+
+    @PutMapping("/events/engagements/{engagementId}")
+    public RequestStatus updateEngagement(
+            @Valid @RequestBody ReplyEngagementReq replyEngagementReq,
+            @PathVariable Long engagementId,
+            AuthUser authUser
+    ){
+        return engagementService.update(authUser, engagementId, replyEngagementReq.getType());
     }
 }

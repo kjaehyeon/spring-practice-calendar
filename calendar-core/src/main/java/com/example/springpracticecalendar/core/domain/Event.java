@@ -18,4 +18,8 @@ public class Event {
         return schedule.isOverlapped(startAt, endAt);
        // return schedule.getStartAt().isBefore(endAt) && startAt.isBefore(schedule.getEndAt());
     }
+    public Period getPeriod(){
+        return Period.of(schedule.getStartAt(), schedule.getEndAt());
+    }
+
 }

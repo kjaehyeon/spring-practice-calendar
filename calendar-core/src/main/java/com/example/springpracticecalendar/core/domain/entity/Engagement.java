@@ -1,5 +1,6 @@
 package com.example.springpracticecalendar.core.domain.entity;
 
+import com.example.springpracticecalendar.core.constant.RequestReplyType;
 import com.example.springpracticecalendar.core.constant.RequestStatus;
 import com.example.springpracticecalendar.core.domain.Event;
 import com.example.springpracticecalendar.core.util.Period;
@@ -36,5 +37,17 @@ public class Engagement extends BaseEntity{
 
     public boolean isOverlapped(Period period){
         return this.schedule.isOverlapped(period);
+    }
+
+    public Engagement reply(RequestReplyType requestReplyType) {
+        switch (requestReplyType){
+            case ACCEPT:
+                this.requestStatus = RequestStatus.ACCEPTED;
+                break;
+            case REJECT:
+                this.requestStatus = RequestStatus.REJECTED;
+                break;
+        }
+        return this;
     }
 }

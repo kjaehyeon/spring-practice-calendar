@@ -1,6 +1,7 @@
 package com.example.springpracticecalendar.api.service;
 
 import com.example.springpracticecalendar.api.dto.AuthUser;
+import com.example.springpracticecalendar.api.dto.EngagementEmailStuff;
 import com.example.springpracticecalendar.api.dto.EventCreateReq;
 import com.example.springpracticecalendar.core.domain.entity.Engagement;
 import com.example.springpracticecalendar.core.domain.entity.Schedule;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.example.springpracticecalendar.core.constant.RequestStatus.ACCEPTED;
 import static com.example.springpracticecalendar.core.constant.RequestStatus.REQUESTED;
@@ -54,17 +56,26 @@ public class EventService {
         );
         scheduleRepository.save(eventSchedule);
 
-        eventCreateReq.getAttendeeIds()
-                .forEach(Id -> {
-                    final User attendee = userService.findById(Id);
+        final List<User> attendees =
+                eventCreateReq.getAttendeeIds().stream()
+                        .map(userService::findById)
+                        .collect(Collectors.toList());
+
+        attendees.forEach(attendee -> {
                     final Engagement engagement = Engagement.builder()
                             .attendee(attendee)
                             .requestStatus(REQUESTED)
                             .schedule(eventSchedule)
                             .build();
-
                     engagementRepository.save(engagement);
-                    emailService.sendEngagement(engagement);
+
+                    emailService.sendEngagement(EngagementEmailStuff.builder()
+                            .title(engagement.getEvent().getSchedule().getTitle())
+                            .engagementId(engagement.getId())
+                            .toEmail(engagement.getAttendee().getEmail())
+                            .attendeeEmails(attendees.stream().map(User::getEmail).collect(Collectors.toList()))
+                            .period(engagement.getEvent().getPeriod())
+                            .build());
                 });
     }
 }
