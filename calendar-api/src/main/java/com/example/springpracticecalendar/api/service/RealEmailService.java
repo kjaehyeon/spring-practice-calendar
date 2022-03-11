@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
@@ -20,6 +21,7 @@ public class RealEmailService implements EmailService{
     private final SpringTemplateEngine templateEngine;
 
     @Override
+    @Async
     public void sendEngagement(EngagementEmailStuff stuff) {
         javaMailSender.send(mimeMessage -> {
                     final MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);

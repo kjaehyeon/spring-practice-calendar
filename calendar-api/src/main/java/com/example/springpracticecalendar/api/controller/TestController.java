@@ -1,5 +1,8 @@
 package com.example.springpracticecalendar.api.controller;
 
+import com.example.springpracticecalendar.api.dto.EngagementEmailStuff;
+import com.example.springpracticecalendar.api.service.EmailService;
+import com.example.springpracticecalendar.core.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -14,12 +17,13 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
 public class TestController {
     private final JavaMailSender javaMailSender;
-
+    private final EmailService emailService;
     @GetMapping("/api/mail")
     public @ResponseBody void sendTestMail(){
         javaMailSender.send(mimeMessage -> {
